@@ -1,7 +1,14 @@
 import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { StoreCartProvider } from './context/StoreCartContext';
 import MainLayout from './layouts/MainLayout';
+import StoreLayout from './pages/storefront/StoreLayout';
+import StoreHome from './pages/storefront/StoreHome';
+import StoreProducts from './pages/storefront/StoreProducts';
+import StoreProductDetail from './pages/storefront/StoreProductDetail';
+import StoreCart from './pages/storefront/StoreCart';
+import StoreCheckout from './pages/storefront/StoreCheckout';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import OtpVerification from './pages/auth/OtpVerification';
@@ -58,6 +65,13 @@ function AppRoutes() {
       <Route path="/verify-otp" element={<PublicRoute><OtpVerification /></PublicRoute>} />
       <Route path="/forgot-password" element={<PublicRoute><ForgotPassword /></PublicRoute>} />
       <Route path="/reset-password" element={<PublicRoute><ResetPassword /></PublicRoute>} />
+
+      <Route path="/loja/:slug" element={<StoreLayout><StoreHome /></StoreLayout>} />
+      <Route path="/loja/:slug/produtos" element={<StoreLayout><StoreProducts /></StoreLayout>} />
+      <Route path="/loja/:slug/produto/:id" element={<StoreLayout><StoreProductDetail /></StoreLayout>} />
+      <Route path="/loja/:slug/carrinho" element={<StoreLayout><StoreCart /></StoreLayout>} />
+      <Route path="/loja/:slug/checkout" element={<StoreLayout><StoreCheckout /></StoreLayout>} />
+
       <Route path="/" element={<PrivateRoute><MainLayout><Dashboard /></MainLayout></PrivateRoute>} />
       <Route path="/customers" element={<PrivateRoute><MainLayout><CustomersIndex /></MainLayout></PrivateRoute>} />
       <Route path="/customers/new" element={<PrivateRoute><MainLayout><CustomersForm /></MainLayout></PrivateRoute>} />
@@ -91,7 +105,9 @@ export default function App() {
     <BrowserRouter>
       <ThemeProvider>
         <AuthProvider>
-          <AppRoutes />
+          <StoreCartProvider>
+            <AppRoutes />
+          </StoreCartProvider>
         </AuthProvider>
       </ThemeProvider>
     </BrowserRouter>

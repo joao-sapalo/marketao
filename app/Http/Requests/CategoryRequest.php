@@ -16,6 +16,7 @@ class CategoryRequest extends FormRequest
         return [
             'name' => ['required', 'min:2'],
             'description' => ['nullable'],
+            'store_id' => ['required', 'exists:stores,id'],
         ];
     }
 }

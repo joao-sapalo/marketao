@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             PurchaseSeeder::class,
             AccountReceivableSeeder::class,
             AccountPayableSeeder::class,
+            StoreSeeder::class,
         ]);
     }
 }

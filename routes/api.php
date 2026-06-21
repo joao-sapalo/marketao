@@ -1,20 +1,22 @@
 <?php
 
-use App\Http\Controllers\Api\AuthController;
-use App\Http\Controllers\Api\CustomerController;
-use App\Http\Controllers\Api\SupplierController;
-use App\Http\Controllers\Api\CategoryController;
-use App\Http\Controllers\Api\ProductController;
-use App\Http\Controllers\Api\SaleController;
-use App\Http\Controllers\Api\PurchaseController;
-use App\Http\Controllers\Api\StockMovementController;
-use App\Http\Controllers\Api\CashRegisterController;
-use App\Http\Controllers\Api\CashMovementController;
-use App\Http\Controllers\Api\AccountReceivableController;
 use App\Http\Controllers\Api\AccountPayableController;
+use App\Http\Controllers\Api\AccountReceivableController;
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CashMovementController;
+use App\Http\Controllers\Api\CashRegisterController;
+use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\NotificationController;
+use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\PurchaseController;
 use App\Http\Controllers\Api\ReportController;
+use App\Http\Controllers\Api\SaleController;
+use App\Http\Controllers\Api\StockMovementController;
+use App\Http\Controllers\Api\StoreController;
+use App\Http\Controllers\Api\StorefrontController;
+use App\Http\Controllers\Api\SupplierController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [AuthController::class, 'login'])->middleware('throttle:5,1');
@@ -24,10 +26,20 @@ Route::post('/verify-otp', [AuthController::class, 'verifyOtp'])->middleware('th
 Route::post('/forgot-password', [AuthController::class, 'forgotPassword'])->middleware('throttle:3,60');
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])->middleware('throttle:3,60');
 
+Route::prefix('s/{slug}')->group(function () {
+    Route::get('/', [StorefrontController::class, 'store']);
+    Route::get('/products', [StorefrontController::class, 'products']);
+    Route::get('/products/{product}', [StorefrontController::class, 'product']);
+    Route::get('/categories', [StorefrontController::class, 'categories']);
+    Route::post('/checkout', [StorefrontController::class, 'checkout'])->middleware('throttle:10,1');
+});
+
 Route::middleware(['auth:sanctum', 'throttle:60,1'])->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::put('/profile', [AuthController::class, 'updateProfile']);
+
+    Route::apiResource('stores', StoreController::class);
 
     Route::apiResource('customers', CustomerController::class);
     Route::apiResource('suppliers', SupplierController::class);

@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-#[Fillable(['customer_id', 'user_id', 'total', 'discount', 'notes', 'status'])]
+#[Fillable(['customer_id', 'user_id', 'total', 'discount', 'notes', 'status', 'store_id', 'source', 'customer_name', 'customer_phone', 'customer_email', 'delivery_address', 'payment_method'])]
 class Sale extends Model
 {
     /** @use HasFactory<SaleFactory> */
@@ -19,6 +19,7 @@ class Sale extends Model
     public const STATUS_COMPLETED = 'completed';
     public const STATUS_CANCELLED = 'cancelled';
     public const STATUS_DRAFT = 'draft';
+    public const STATUS_PENDING = 'pending';
 
     public function customer(): BelongsTo
     {
