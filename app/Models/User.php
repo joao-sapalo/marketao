@@ -9,8 +9,10 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Services\Store\CreateStoreService;
 use Laravel\Sanctum\HasApiTokens;
 
 #[Fillable(['name', 'email', 'password', 'phone', 'position', 'is_active', 'role_id', 'email_verified_at'])]
@@ -31,6 +33,20 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        static::created(function (User $user) {
+            if (! $user->store()->exists()) {
+                app(CreateStoreService::class, ['user' => $user])->call();
+            }
+        });
+    }
+
+    public function store(): HasOne
+    {
+        return $this->hasOne(Store::class);
     }
 
     public function role(): BelongsTo

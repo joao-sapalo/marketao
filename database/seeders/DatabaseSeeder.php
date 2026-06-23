@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
             AccountReceivableSeeder::class,
             AccountPayableSeeder::class,
             StoreSeeder::class,
+            StoreModuleSeeder::class,
         ]);
     }
 }
